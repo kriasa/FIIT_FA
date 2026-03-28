@@ -104,7 +104,6 @@ public abstract class BinarySearchTreeBase<TKey, TValue, TNode>(IComparer<TKey>?
         return true;
     }
     
-    
     protected virtual void RemoveNode(TNode node)
     {
 
@@ -130,12 +129,14 @@ public abstract class BinarySearchTreeBase<TKey, TValue, TNode>(IComparer<TKey>?
             while (temp.Left is not null) temp = temp.Left;
 
             TNode? fixParent = (temp.Parent == node) ? temp : temp.Parent;
+
             if (temp!.Parent != node)
             {
                 Transplant(temp,temp.Right);
                 temp.Right = node.Right;
                 temp.Right.Parent = temp;
             }
+            
             Transplant(node,temp);
             temp.Left = node.Left;
             temp.Left.Parent = temp;
