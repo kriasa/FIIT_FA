@@ -27,7 +27,7 @@ internal class KaratsubaMultiplier : IMultiplier
         var a0 = a.Slice(0, Math.Min(m, a.Length));
         var a1 = m < a.Length ? a.Slice(m) : ReadOnlySpan<uint>.Empty;
         var b0 = b.Slice(0, Math.Min(m, b.Length));
-        var b1 = m < a.Length ? a.Slice(m) : ReadOnlySpan<uint>.Empty;
+        var b1 = m < b.Length ? b.Slice(m) : ReadOnlySpan<uint>.Empty;
 
         uint[] p1 = KaratsubaRecursion(a0, b0);
         uint[] p2 = KaratsubaRecursion(a1, b1);
@@ -159,7 +159,7 @@ internal class KaratsubaMultiplier : IMultiplier
             if (offset + i >= res.Length) break;
 
             uint resDigit = res[offset + i];
-            uint digit = (i < digits.Length) ? digits[i] : 0;
+            uint digit = digits[i];
 
             uint r1 = resDigit & 0xFFFF;
             uint l1 = resDigit >> 16;
@@ -171,6 +171,22 @@ internal class KaratsubaMultiplier : IMultiplier
 
             res[offset + i] = (high << 16) | (low & 0xFFFF);
             acc = high >> 16;
+        }
+
+        int k = digits.Length;
+        while (acc > 0 && offset + k < res.Length)
+        {
+            uint resDigit = res[offset + k];
+
+            uint r1 = resDigit & 0xFFFF;
+            uint l1 = resDigit >> 16;
+
+            uint low = r1 + acc;
+            uint high = l1 + (low >> 16);
+
+            res[offset + k] = (high << 16) | (low & 0xFFFF);
+            acc = high >> 16;
+            k++;
         }
     }
 }
