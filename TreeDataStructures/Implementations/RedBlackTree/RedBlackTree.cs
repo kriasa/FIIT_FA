@@ -19,7 +19,6 @@ public class RedBlackTree<TKey, TValue> : BinarySearchTreeBase<TKey, TValue, RbN
         {
             return;
         }
-        a
         FixInsert(newNode);
         Root!.Color = RbColor.Black;
     }
